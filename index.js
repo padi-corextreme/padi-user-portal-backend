@@ -2,6 +2,7 @@ import express from"express";
 import cors from "cors";
 import mongoose from 'mongoose';
 import userRoute from './routes/users.routes.js';
+import cookieParser from "cookie-parser";
 
 
 //create express app
@@ -12,10 +13,12 @@ const app = express()
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(cookieParser());
+
 
 
 //load routes
-app.use(userRoute);
+app.use('/users', userRoute);
 
 
 //make database connection

@@ -7,17 +7,17 @@ const router = Router();
 
 
 //Define routes
-router.post('/users', addUser);
+router.post('/register', addUser);
 
 router.post('/login', loginUser);
 
-router.get('/users', getAllUsers);
+router.get('/', getAllUsers);
 
-router.get('/users/:id', getUser);
+router.get('/:id', getUser);
 
-router.patch('/users/:id', updateUser);
+router.patch('/:id', updateUser);
 
-router.delete('/users/:id', deleteUser);
+router.delete('/:id', deleteUser);
 
 
 

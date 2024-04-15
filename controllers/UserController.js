@@ -1,5 +1,7 @@
 import {UserModel} from '../models/user.js';
 import { hashPassword, comparePassword} from '../helpers/auth.js';
+import jwt from 'jsonwebtoken';
+import { ObjectId } from 'mongodb';
 
 
 
@@ -69,13 +71,20 @@ export const loginUser = async (req, res, next) => {
         if (match) {
             return res.json('Password match');
         } else{
-            return res.json("Password don't match");
+            return res.json({error: "Password don't match"});
         }
        
     } catch (error) {
         next(error);
     }
 };
+
+
+// Endpoint for logging out
+export const logOut = async (req, res, next) => {
+
+}
+
 
 
 
@@ -119,18 +128,15 @@ export const getAllUsers = async (req, res, next) => {
   export const updateUser = async (req, res, next) => {
     try {
        // Get a user by id
-       const findByIdResult = await UserModel.findById(req.params.id);
-       const update = await UserModel.findOne({})
-      // Return 404 if no user is found
-      if (findByIdResult === null) {
-        res.status(404).json({
-          message: `User with ID: ${req.params.id} not found`,
-        });
-      } else {
-        const newUpdate = await UserModel.findOneAndUpdate(findByIdResult, update)
+       const findByIdResult = {_id: new ObjectId(req.params.id)}
+       const update = {
+        $set: req.body
+       }
+      
+        const newUpdate = await UserModel.updateOne(findByIdResult, update)
         // Return response
-        res.status(200).json(newUpdate);
-      } 
+        res.status(202).json(newUpdate);
+      
     } catch (error) {
         next(error);   
     }
