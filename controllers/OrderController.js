@@ -68,11 +68,3 @@ export const addOrder = async (req, res, next) => {
           }
         };
 
-
-
-
-
-
-
-
-

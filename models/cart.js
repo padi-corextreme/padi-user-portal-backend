@@ -6,8 +6,8 @@ const cartSchema = new Schema({
     price: {type: Number, required: true},
     category: {type: Number, required: true},
     discount: {type: Number},
-    colors: [String],
-    sizes: [String],
+    color: {String},
+    size: {String},
     total_item: {type: Number, required: true},
     total_price: {type: Number, required: true},
 });
