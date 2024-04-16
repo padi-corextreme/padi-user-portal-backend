@@ -1,8 +1,9 @@
 import express from"express";
 import cors from "cors";
 import mongoose from 'mongoose';
-import userRoute from './routes/users.routes.js';
 import cookieParser from "cookie-parser";
+import userRoute from './routes/users.routes.js';
+import orderRoute from './routes/orders.routes.js'
 
 
 //create express app
@@ -19,6 +20,7 @@ app.use(cookieParser());
 
 //load routes
 app.use('/users', userRoute);
+app.use('/orders', orderRoute);
 
 
 //make database connection
