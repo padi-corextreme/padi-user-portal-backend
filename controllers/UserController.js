@@ -130,7 +130,7 @@ export const getAllUsers = async (req, res, next) => {
        // Get a user by id
        const findByIdResult = {_id: new ObjectId(req.params.id)}
        const update = {
-        $set: req.body
+        $set: {interests: req.body.interests}
        }
       
         const newUpdate = await UserModel.updateOne(findByIdResult, update)

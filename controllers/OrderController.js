@@ -1,4 +1,5 @@
-import { OrderModel } from "../models/orders";
+import { ObjectId } from "mongodb";
+import { OrderModel } from "../models/orders.js";
 
 
 
@@ -40,7 +41,7 @@ export const addOrder = async (req, res, next) => {
             // Return 404 if no order is found
             if (findByIdResult === null) {
               res.status(404).json({
-                message: `Recipe with ID: ${req.params.id} not found`,
+                message: `Order with ID: ${req.params.id} not found`,
               });
             } else {
               // Return response
@@ -48,5 +49,21 @@ export const addOrder = async (req, res, next) => {
             }
           } catch (error) {
             next(error);
+          }
+        };
+
+
+     export const updateOrder = async (req, res, next) => {
+          try {
+             // Get an order by id
+             const findByIdResult = {_id: new ObjectId(req.params.id)}
+             const update = { $set: req.body}
+            
+              const newUpdate = await OrderModel.updateOne(findByIdResult, update)
+              // Return response
+              res.status(202).json(newUpdate);
+            
+          } catch (error) {
+              next(error);   
           }
         };

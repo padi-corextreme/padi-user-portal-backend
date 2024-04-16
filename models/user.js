@@ -7,10 +7,7 @@ const userSchema = new Schema({
     telephone: {type: String, required: true},
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
-    interestId: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Interest'
-    }]
+    interests: [String]
 });
 
 export const UserModel = model('User', userSchema, 'users');
