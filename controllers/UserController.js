@@ -106,7 +106,7 @@ export const getAllUsers = async (req, res, next) => {
   export const getUser = async (req, res, next) => {
     try {
       // Get a user by id
-      const findByIdResult = await UserModel.findById(req.params.id);
+      const findByIdResult = await UserModel.findById(req.params.id).populate('interestId');
       // Return 404 if no user is found
       if (findByIdResult === null) {
         res.status(404).json({

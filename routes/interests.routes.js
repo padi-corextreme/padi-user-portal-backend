@@ -8,7 +8,7 @@ const router = Router();
 
 
 //Define routes
-router.post('/:user_id', addInterest);
+router.post('/:userId', addInterest);
 
 router.get('/', getAllInterests);
 
