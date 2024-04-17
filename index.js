@@ -6,7 +6,8 @@ import userRoute from './routes/users.routes.js';
 import orderRoute from './routes/orders.routes.js';
 import wishlistRoute from './routes/wishlist.routes.js';
 import cartRoute from './routes/cart.routes.js';
-import productRoute from './routes/products.routes.js'
+import productRoute from './routes/products.routes.js';
+import interestRoute from './routes/interests.routes.js';
 
 
 //create express app
@@ -27,6 +28,7 @@ app.use('/orders', orderRoute);
 app.use('/wishlist', wishlistRoute);
 app.use('/cart', cartRoute);
 app.use('/products', productRoute);
+app.use('/interests', interestRoute);
 
 
 //make database connection

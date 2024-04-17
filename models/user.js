@@ -7,7 +7,10 @@ const userSchema = new Schema({
     telephone: {type: String, required: true},
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
-    interests: [String]
+    interestId: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "interest"
+    }]
 });
 
 export const UserModel = model('User', userSchema, 'users');
