@@ -16,9 +16,8 @@ router.get('/', getAllUsers);
 
 router.get('/profile',  verifyToken, getUser);
 
-router.patch('/:id', updateUser);
+router.patch('/:id', updateUser).delete('/:id', deleteUser);;
 
-router.delete('/:id', deleteUser);
 
 
 
