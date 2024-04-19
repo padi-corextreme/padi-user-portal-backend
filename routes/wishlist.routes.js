@@ -7,7 +7,7 @@ const router = Router()
 
 
 //Define routes
-router.post('/', addWishlist);
+router.post('/:userId', addWishlist);
 
 router.get('/', getAllWishlists);
 
