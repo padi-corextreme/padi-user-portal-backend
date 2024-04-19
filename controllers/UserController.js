@@ -9,40 +9,39 @@ import { ObjectId } from 'mongodb';
 export const addUser = async (req, res, next) => {
     try {
         //Check if name was entered
-        const {name, email, telephone, password} = req.body
+        const {name, email, telephone} = req.body
         if (!name) {
-            return res.json({
+            return res.status(400).json({
                 error: 'Name is required'
             })
         };
 
-        //Check if password is good
-        if (!password || password.length < 6) {
-            return res.json({
-                error: 'Password is required and should be at least 6 characters long'
-            })
-        };
+        // //Check if password is good
+        // if (!password || password.length < 6) {
+        //     return res.status(400).json({
+        //         error: 'Password is required and should be at least 6 characters long'
+        //     })
+        // };
 
         //Check if email exist
         const exist = await UserModel.findOne({email});
         if (exist) {
-            return res.json({
+            return res.status(400).json({
                 error: 'Email already exist'
             })
         };
 
         //Check if telephone number is up to 10
         if (!telephone || telephone.length !== 10) {
-            return res.json({
+            return res.status(400).json({
                 error: 'Telephone number is required and should be 10 characters long'
             })
         };
 
 
         //Add a user to the database
-        const hashedPassword = await hashPassword(password)
-        const createResult = await UserModel.create({...req.body,
-        password: hashedPassword,});
+        // const hashedPassword = await hashPassword(password)
+        const createResult = await UserModel.create({...req.body});
         
         // Return response
         res.status(201).json(createResult);
@@ -56,29 +55,43 @@ export const addUser = async (req, res, next) => {
 //Login Endpoint
 export const loginUser = async (req, res, next) => {
     try {
-        const {email, password} = req.body;
+        const {email, telephone} = req.body;
         //Check if user exists
         const user = await UserModel.findOne({email});
         if (!user) {
-            return res.json({
-                error: 'No user found'
-            })
+          
+          return res.status(400).json({
+            error: 'No user found'
+        })
+          }else{
+            jwt.sign({email: user.email, id: user._id, name: user.name}, process.env.JWT_SECRET, {}, (err, token) => {
+              if(err) throw err;
+              res.status(200).json({message: 'Login successful', accessToken: token});
+             })
         };
 
-        //Check if password match
+        // //Check if password match
         
-        const match =  await comparePassword(password, user.password);
-        if (match) {
-            return res.json('Password match');
-        } else{
-            return res.json({error: "Password don't match"});
-        }
+        // const match =  await comparePassword(password, user.password);
+        // if (match) {
+        //  jwt.sign({email: user.email, id: user._id, name: user.name}, process.env.JWT_SECRET, {}, (err, token) => {
+        //   if(err) throw err;
+        //   res.cookie('token', token).json(user)
+        //  })
+        // } else{
+        //   return res.status(400).json({error: "Password don't match"});
+        // }
        
     } catch (error) {
         next(error);
     }
 };
 
+
+//Endpoint for getting profile
+export const getProfile = (req, res, next) => {
+const {token} = req
+}
 
 // Endpoint for logging out
 export const logOut = async (req, res, next) => {

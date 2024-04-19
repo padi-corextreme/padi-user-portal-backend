@@ -13,7 +13,7 @@ export const addInterest = async (req, res, next) => {
     const createResult = await InterestModel.create(req.body);
     // Update user interestId
     await UserModel.findByIdAndUpdate(req.params.userId, {
-      $push: { interestId: createResult._id },
+      $push: { interests: createResult._id },
     });
     // Return response
     res.status(201).json(createResult);

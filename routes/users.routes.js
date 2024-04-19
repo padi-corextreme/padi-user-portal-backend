@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { addUser, getAllUsers, getUser, loginUser, updateUser, deleteUser } from "../controllers/UserController.js";
+import { addUser, getAllUsers, getUser, loginUser, updateUser, deleteUser, getProfile } from "../controllers/UserController.js";
+import { verifyToken } from "../helpers/auth.js";
 
 
 //Create users router
@@ -13,7 +14,7 @@ router.post('/login', loginUser);
 
 router.get('/', getAllUsers);
 
-router.get('/:id', getUser);
+router.get('/profile',  verifyToken, getUser);
 
 router.patch('/:id', updateUser);
 
