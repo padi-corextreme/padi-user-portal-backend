@@ -2,6 +2,7 @@ import {UserModel} from '../models/user.js';
 import { hashPassword, comparePassword} from '../helpers/auth.js';
 import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
+import redisClient from './redisClient'; // Make sure you have a Redis client setup
 
 
 
@@ -89,14 +90,49 @@ export const loginUser = async (req, res, next) => {
 
 
 //Endpoint for getting profile
-export const getProfile = (req, res, next) => {
-const {token} = req
-}
+export const getProfile = async (req, res, next) => {
+  try {
+      const { authorization } = req.headers;
+      if (!authorization || !authorization.startsWith('Bearer ')) {
+          return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      const token = authorization.split(' ')[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      
+      const user = await UserModel.findById(decoded.id);
+      if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+
+      res.json({ name: user.name, email: user.email });
+  } catch (error) {
+      if (error instanceof jwt.JsonWebTokenError) {
+          return res.status(401).json({ error: 'Invalid token' });
+      }
+      next(error);
+  }
+};
 
 // Endpoint for logging out
-export const logOut = async (req, res, next) => {
 
-}
+// export const logOut = async (req, res, next) => {
+//     try {
+//         const { authorization } = req.headers;
+//         if (authorization && authorization.startsWith('Bearer ')) {
+//             const token = authorization.split(' ')[1];
+
+//             // Store the token in Redis with an expiration time matching the token's original expiration
+//             await redisClient.set(`blacklist_${token}`, 'logged out', 'EX', 3600); // Assuming token expires in 1 hour
+
+//             return res.status(200).json({ message: 'Logout successful' });
+//         }
+//         res.status(400).json({ error: 'No active session' });
+//     } catch (error) {
+//         next(error);
+//     }
+// };
+
 
 
 
