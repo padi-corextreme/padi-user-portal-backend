@@ -42,7 +42,7 @@ export const getInterest = async (req, res, next) => {
     // Return 404 if no interest is found
     if (findByIdResult === null) {
       res.status(404).json({
-        message: `Product with ID: ${req.params.id} not found`,
+        message: `Interest with ID: ${req.params.id} not found`,
       });
     } else {
       // Return response
