@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import mongoose from "mongoose";
 
 const cartSchema = new Schema({
-  product: { type: mongoose.Schema.Types.ObjectId, required: true },
+  product: { type: mongoose.Schema.Types.ObjectId },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 

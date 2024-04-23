@@ -66,7 +66,7 @@ export const loginUser = async (req, res, next) => {
           if (err) throw err;
           res
             .status(200)
-            .json({ message: "Login successful", accessToken: token });
+            .json({ message: "Login successful", accessToken: token, user });
         }
       );
     }
@@ -94,7 +94,6 @@ export const getProfile = (req, res, next) => {
 
 // Endpoint for logging out
 export const logOut = async (req, res, next) => {};
-
 
 //Endpoint for getting all users
 export const getAllUsers = async (req, res, next) => {
