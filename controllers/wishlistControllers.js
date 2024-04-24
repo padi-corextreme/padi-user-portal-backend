@@ -10,9 +10,9 @@ export const addWishlist = async (req, res, next) => {
       return res.status(404).json("User not found");
     }
 
-    // Add interest to database
+    // Add wishlist to database
     const createResult = await WishlistModel.create(req.body);
-    // Update user interestId
+    // Update user wishlist
     await UserModel.findByIdAndUpdate(req.params.userId, {
       $push: { wishlist: createResult._id },
     });

@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import mongoose from "mongoose";
 
 const wishlistSchema = new Schema({
-    products: {type: mongoose.Schema.Types.ObjectId }
+  product: [{ type: mongoose.Schema.Types.ObjectId, required: true }],
 });
 
-export const WishlistModel = model('Wishlist', wishlistSchema, 'wishlists');
+export const WishlistModel = model("Wishlist", wishlistSchema, "wishlists");
