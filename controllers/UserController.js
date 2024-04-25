@@ -7,19 +7,19 @@ import { ObjectId } from "mongodb";
 export const addUser = async (req, res, next) => {
   try {
     //Check if name was entered
-    const { name, email, telephone } = req.body;
+    const { name, email,password, telephone } = req.body;
     if (!name) {
       return res.status(400).json({
         error: "Name is required",
       });
     }
 
-    // //Check if password is good
-    // if (!password || password.length < 6) {
-    //     return res.status(400).json({
-    //         error: 'Password is required and should be at least 6 characters long'
-    //     })
-    // };
+    //Check if password is good
+    if (!password || password.length < 6) {
+        return res.status(400).json({
+            error: 'Password is required and should be at least 6 characters long'
+        })
+    };
 
     //Check if email exist
     const exist = await UserModel.findOne({ email });
@@ -37,8 +37,11 @@ export const addUser = async (req, res, next) => {
     }
 
     //Add a user to the database
-    // const hashedPassword = await hashPassword(password)
-    const createResult = await UserModel.create({ ...req.body });
+    const hashedPassword = await hashPassword(password)
+    const createResult = await UserModel.create({
+      ...req.body,
+      password: hashedPassword,
+    });
 
     // Return response
     res.status(201).json(createResult);
@@ -50,38 +53,27 @@ export const addUser = async (req, res, next) => {
 //Login Endpoint
 export const loginUser = async (req, res, next) => {
   try {
-    const { email, telephone } = req.body;
+    const { email, password } = req.body;
     //Check if user exists
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(400).json({
         error: "No user found",
       });
-    } else {
-      jwt.sign(
-        { email: user.email, id: user._id, name: user.name },
-        process.env.JWT_SECRET,
-        {},
-        (err, token) => {
-          if (err) throw err;
-          res
-            .status(200)
-            .json({ message: "Login successful", accessToken: token, user });
-        }
-      );
+    } 
+
+    //Check if password match
+
+    const match =  await comparePassword(password, user.password);
+    if (match) {
+     jwt.sign({email: user.email, id: user._id, name: user.name}, process.env.JWT_SECRET, {}, (err, token) => {
+      if (err) throw err;
+      return res.status(200).json({ user, token });
     }
-
-    // //Check if password match
-
-    // const match =  await comparePassword(password, user.password);
-    // if (match) {
-    //  jwt.sign({email: user.email, id: user._id, name: user.name}, process.env.JWT_SECRET, {}, (err, token) => {
-    //   if(err) throw err;
-    //   res.cookie('token', token).json(user)
-    //  })
-    // } else{
-    //   return res.status(400).json({error: "Password don't match"});
-    // }
+  );
+    } else{
+      return res.status(400).json({error: "Password don't match"});
+    }
   } catch (error) {
     next(error);
   }
