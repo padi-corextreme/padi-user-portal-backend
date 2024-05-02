@@ -7,10 +7,10 @@ const userSchema = new Schema({
     telephone: {type: String, required: true},
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
-    interests: [{
+    interests: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Interest"
-    }],
+    },
     wishlist: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Wishlist"
